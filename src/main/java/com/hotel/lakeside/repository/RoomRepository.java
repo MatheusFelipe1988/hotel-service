@@ -1,4 +1,8 @@
 package com.hotel.lakeside.repository;
 
-public interface RoomRepository {
+import com.hotel.lakeside.model.Room;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface RoomRepository extends JpaRepository<Room, Long> {
+
 }

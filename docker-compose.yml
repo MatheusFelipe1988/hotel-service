@@ -1,4 +1,4 @@
-version: '3.8'
+version: '4.31.0'
 
 services:
     db:
@@ -6,7 +6,6 @@ services:
       environment:
         MYSQL_ROOT_PASSWORD: senha
         MYSQL_DATABASE: hotelHooking
-        MYSQL_USER: root
         MYSQL_PASSWORD: senha
       ports:
         - "3306:3306"
