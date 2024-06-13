@@ -1,2 +1,2 @@
 # hotel-service
-Aplicação Full Stack que utiliza serviços de hoteleira e com uma camada de segurança
+Aplicação Back-End Java de Hotel que conecta a outra aplicação, uma front-end em React
