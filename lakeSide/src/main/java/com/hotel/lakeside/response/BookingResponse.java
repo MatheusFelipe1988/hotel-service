@@ -22,11 +22,12 @@ public class BookingResponse {
     private String bookingConfirmationCOde;
     private RoomResponse room;
 
-    public BookingResponse(LocalDate checkinOutDate, LocalDate checkInDate, Long id,
-                           String bookingConfirmationCOde) {
-        this.checkinOutDate = checkinOutDate;
-        this.checkInDate = checkInDate;
+
+    public BookingResponse(Long bookingId, LocalDate checkInDate, LocalDate checkOutDate,
+                           String bookingConfirmationCode) {
         this.id = id;
-        this.bookingConfirmationCOde = bookingConfirmationCOde;
+        this.checkInDate = checkInDate;
+        this.checkinOutDate = checkOutDate;
+        this.bookingConfirmationCOde = bookingConfirmationCode;
     }
 }
