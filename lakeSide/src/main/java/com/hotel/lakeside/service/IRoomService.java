@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 public interface IRoomService {
     Room addNewRoom(MultipartFile foto, String roomType, BigDecimal roomPrice) throws SQLException, IOException;
@@ -16,4 +17,10 @@ public interface IRoomService {
     List<Room> getAllRoms();
 
     byte[] getRoomFotoByRoomId(Long roomId) throws SQLException;
+
+    void deleteRoom(Long roomId);
+
+    Room updateRoom(Long roomId, String roomType, BigDecimal roomPrice, byte[] fotoBytes);
+
+    Optional<Room> getRoomById(Long roomId);
 }
