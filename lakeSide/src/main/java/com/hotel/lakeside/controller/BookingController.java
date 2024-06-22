@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@CrossOrigin("*")
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/bookings")
@@ -24,8 +25,9 @@ public class BookingController {
     private final IRoomService roomService;
 
     @GetMapping("/all-bookings")
-    public ResponseEntity<List<BookingResponse>> getAllRooms(){
-        List<BookedRoom> bookedRooms = service.getAllRooms();
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    public ResponseEntity<List<BookingResponse>> getAllBookings(){
+        List<BookedRoom> bookedRooms = service.getAllBookings();
         List<BookingResponse> bookingResponses = new ArrayList<>();
         for(BookedRoom booking : bookedRooms){
             BookingResponse bookingResponse = getBookingResponse(booking);
@@ -34,18 +36,8 @@ public class BookingController {
         return ResponseEntity.ok(bookingResponses);
     }
 
-    @GetMapping("/confirmation/{confirmationCode}")
-    public ResponseEntity<?> getBookingConfirmationCOde(@PathVariable String confirmationCode){
-        try {
-            BookedRoom booking = service.findByBookingConfirmationCode(confirmationCode);
-            BookingResponse bookingResponse = getBookingResponse(booking);
-            return ResponseEntity.ok(bookingResponse);
-        }catch (ResourceNotFoundException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
-    }
-
     @PostMapping("/room/{roomId}/booking")
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     public ResponseEntity<?> saveBooking(@PathVariable Long roomId, @RequestBody BookedRoom bookingRequest){
         try {
             String confirmationCode = service.saveBooking(roomId, bookingRequest);
@@ -56,17 +48,40 @@ public class BookingController {
         }
     }
 
+    @GetMapping("/confirmation/{confirmationCode}")
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    public ResponseEntity<?> getBookingConfirmationCode(@PathVariable String confirmationCode){
+        try {
+            BookedRoom booking = service.findByBookingConfirmationCode(confirmationCode);
+            BookingResponse bookingResponse = getBookingResponse(booking);
+            return ResponseEntity.ok(bookingResponse);
+        }catch (ResourceNotFoundException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
+
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @DeleteMapping("/booking/{bookingId}/delete")
-    public void cancelBooking(Long bookingId){
+    public void cancelBooking(@PathVariable Long bookingId){
         service.cancelBooking(bookingId);
     }
 
     private BookingResponse getBookingResponse(BookedRoom booking){
         Room theRoom = roomService.getRoomById(booking.getRoom().getId()).get();
         RoomResponse room = new RoomResponse(
-                theRoom.getId(),theRoom.getRoomType(), theRoom.getRoomPrice());
-        return new BookingResponse(booking.getBookingId(),booking.getCheckInDate(),booking.getCheckOutDate(),
-                booking.getBookingConfirmationCode(), booking.getGuestEmail(), booking.getNumberOfAdults(),
-                booking.getNumberOfChildren(), booking.getTotalFullguest(), booking.getGuestFullName(), room);
+                theRoom.getId(),
+                theRoom.getRoomType(),
+                theRoom.getRoomPrice());
+        return new BookingResponse(
+                booking.getBookingId(),
+                booking.getCheckInDate(),
+                booking.getCheckOutDate(),
+                booking.getBookingConfirmationCode(),
+                booking.getGuestEmail(),
+                booking.getNumberOfAdults(),
+                booking.getNumberOfChildren(),
+                booking.getTotalFullguest(),
+                booking.getGuestFullName(), room);
     }
 }

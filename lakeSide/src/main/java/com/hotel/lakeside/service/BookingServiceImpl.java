@@ -23,7 +23,7 @@ public class BookingServiceImpl implements IBookingService{
     }
 
     @Override
-    public List<BookedRoom> getAllRooms() {
+    public List<BookedRoom> getAllBookings() {
         return repository.findAll();
     }
 
@@ -57,7 +57,7 @@ public class BookingServiceImpl implements IBookingService{
     private boolean roomIsAvailble(BookedRoom bookingRequest, List<BookedRoom> existingBookings) {
         return existingBookings.stream()
                 .noneMatch(existingBooking ->
-                        bookingRequest.getCheckInDate().equals(existingBooking.getCheckInDate())
+                        bookingRequest.getCheckOutDate().equals(existingBooking.getCheckInDate())
                                 || bookingRequest.getCheckOutDate().isBefore(existingBooking.getCheckOutDate())
                                 || (bookingRequest.getCheckInDate().isAfter(existingBooking.getCheckInDate())
                                 && bookingRequest.getCheckInDate().isBefore(existingBooking.getCheckOutDate()))
