@@ -9,6 +9,7 @@ import com.hotel.lakeside.service.BookingServiceImpl;
 import com.hotel.lakeside.service.IRoomService;
 import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.codec.binary.Base64;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +20,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.Blob;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -96,6 +98,29 @@ public class RoomController {
             RoomResponse roomResponse = getRoomResponse(room);
             return ResponseEntity.ok(Optional.of(roomResponse));
         }).orElseThrow(() -> new ResourceNotFoundException("Room not found"));
+    }
+
+    public ResponseEntity<List<RoomResponse>> getAvailableRooms(
+            @RequestParam("checkInDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkInDate,
+            @RequestParam("checkOutDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkOutDate,
+            @RequestParam("roomType") String roomType
+            ) throws SQLException {
+        List<Room> availableRoom = service.getAvailableRoom(checkInDate,checkOutDate, roomType);
+        List<RoomResponse> roomResponses = new ArrayList<>();
+        for (Room room : availableRoom){
+            byte[] fotoBytes = service.getRoomFotoByRoomId(room.getId());
+            if(fotoBytes != null && fotoBytes.length > 0){
+                String fotoBase64 = Base64.encodeBase64String(fotoBytes);
+                RoomResponse roomResponse = getRoomResponse(room);
+                roomResponse.setFoto(fotoBase64);
+                roomResponses.add(roomResponse);
+            }
+        }
+        if(roomResponses.isEmpty()){
+            return ResponseEntity.noContent().build();
+        }else {
+            return ResponseEntity.ok(roomResponses);
+        }
     }
 
     private RoomResponse getRoomResponse(Room room) {
