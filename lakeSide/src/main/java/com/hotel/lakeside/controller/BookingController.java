@@ -21,6 +21,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/bookings")
 public class BookingController {
+
     private final IBookingService service;
     private final IRoomService roomService;
 
