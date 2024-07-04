@@ -41,7 +41,10 @@ public class UserServiceImpl implements IUserService{
     @Transactional
     @Override
     public void deleteUser(String email) {
-        repository.deleteByEmail(email);
+        User theUser = getUser(email);
+        if (theUser != null){
+            repository.deleteByEmail(email);
+        }
     }
 
     @Override
