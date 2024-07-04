@@ -1,15 +1,13 @@
 package com.hotel.lakeside.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 
 @Getter
 @Setter
@@ -21,6 +19,8 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+
+    @ManyToMany(mappedBy = "roles")
     private Collection<User> users = new HashSet<>();
 
     public void assignRoleToUser(User user){
@@ -33,6 +33,16 @@ public class Role {
         this.getUsers().remove(user);
     }
 
+    public void removeAllUsersFromRole(){
+        if(this.getUsers() != null){
+            List<User> roleUsers = this.getUsers().stream().toList();
+            roleUsers.forEach(this::removeUserFromRole);
+        }
+    }
+
+    public String getName(){
+        return name != null? name : "";
+    }
 }
 
 
