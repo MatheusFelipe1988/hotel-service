@@ -35,7 +35,7 @@ public class RoomResponse {
         this.roomPrice = roomPrice;
         this.isBooked = isBooked;
         this.foto = fotoByte != null ? Base64.encodeBase64String(fotoByte) : null;
-       // this.bookings = bookings;
+        // this.bookings = bookings;
     }
 
 }

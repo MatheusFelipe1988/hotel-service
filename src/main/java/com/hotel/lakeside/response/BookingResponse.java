@@ -11,23 +11,33 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BookingResponse {
+
     private Long id;
+
     private LocalDate checkInDate;
-    private LocalDate checkinOutDate;
+
+    private LocalDate checkOutDate;
+
     private String guestName;
+
     private String guestEmail;
-    private int numOfAdults;
-    private int numOfChildren;
+
+    private int numberOfAdults;
+
+    private int numberOfChildren;
+
     private int numOfGuests;
-    private String bookingConfirmationCOde;
+
+    private String bookingConfirmationCode;
+
     private RoomResponse room;
 
 
-    public BookingResponse(Long bookingId, LocalDate checkInDate, LocalDate checkOutDate,
+    public BookingResponse(Long id, LocalDate checkInDate, LocalDate checkOutDate,
                            String bookingConfirmationCode) {
         this.id = id;
         this.checkInDate = checkInDate;
-        this.checkinOutDate = checkOutDate;
-        this.bookingConfirmationCOde = bookingConfirmationCode;
+        this.checkOutDate = checkOutDate;
+        this.bookingConfirmationCode = bookingConfirmationCode;
     }
 }
