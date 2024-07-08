@@ -1,38 +1,55 @@
 package com.hotel.lakeside.service;
 
+import com.hotel.lakeside.exception.UserAlreadyExistsException;
+import com.hotel.lakeside.model.Role;
 import com.hotel.lakeside.model.User;
+import com.hotel.lakeside.repository.RoleRepository;
 import com.hotel.lakeside.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 
-@RequiredArgsConstructor
+
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements IUserService{
 
     private final UserRepository repository;
+    private final PasswordEncoder passwordEncoder;
+    private final RoleRepository roleRepository;
 
     @Override
-    public User registerUser(User user) {
+    public User registerUser(User user){
         if (repository.existByEmail(user.getEmail())){
             throw new UserAlreadyExistsException(user.getEmail() + "already exists");
         }
-        return null;
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        Role userRole = roleRepository.findByName("ROLE_USER").get();
+        user.setRoles(Collections.singletonList(userRole));
+        return repository.save(user);
     }
 
     @Override
     public List<User> getUsers() {
-        return List.of();
+        return repository.findAll();
     }
 
+    @Transactional
     @Override
     public void deleteUser(String email) {
-
+        User theUser = getUser(email);
+        if (theUser != null){
+            repository.deleteByEmail(email);
+        }
     }
 
     @Override
     public User getUser(String email) {
-        return null;
+        return repository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 }
