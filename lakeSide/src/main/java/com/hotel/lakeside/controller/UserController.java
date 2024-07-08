@@ -14,6 +14,7 @@ import java.util.List;
 @RequestMapping("/users")
 @RequiredArgsConstructor
 public class UserController {
+
     private final IUserService iUserService;
 
     @GetMapping("/all")

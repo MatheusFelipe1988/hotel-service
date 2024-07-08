@@ -14,8 +14,9 @@ import org.springframework.stereotype.Service;
 import java.util.Collections;
 import java.util.List;
 
-@RequiredArgsConstructor
+
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements IUserService{
 
     private final UserRepository repository;
@@ -24,12 +25,12 @@ public class UserServiceImpl implements IUserService{
 
     @Override
     public User registerUser(User user){
-        if (repository.existByEmail(user.getEmail())){
+        if (repository.existsByEmail(user.getEmail())){
             throw new UserAlreadyExistsException(user.getEmail() + "already exists");
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         Role userRole = roleRepository.findByName("ROLE_USER").get();
-        user.setRoles(Collections.singleton(userRole));
+        user.setRoles(Collections.singletonList(userRole));
         return repository.save(user);
     }
 

@@ -15,9 +15,10 @@ import java.util.List;
 @RequestMapping("/api/roles")
 @RequiredArgsConstructor
 public class RoleController {
+
     private final IRoleService roleService;
 
-    @GetMapping("/all")
+    @GetMapping("/all-roles")
     public ResponseEntity<List<Role>> getAllRoles(){
         return new ResponseEntity<>(roleService.getRoles(), HttpStatus.FOUND);
     }

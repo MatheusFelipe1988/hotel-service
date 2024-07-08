@@ -46,6 +46,7 @@ public class RoleServiceImpl implements IRoleService{
         return roleRepository.findByName(name).get();
     }
 
+
     @Override
     public User removeUserFromRole(Long userId, Long roleId) {
         Optional<User> user = repository.findById(userId);

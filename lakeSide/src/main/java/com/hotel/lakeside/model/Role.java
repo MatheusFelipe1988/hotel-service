@@ -1,6 +1,7 @@
 package com.hotel.lakeside.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -40,7 +41,7 @@ public class Role {
     public void removeAllUsersFromRole(){
         if(this.getUsers() != null){
             List<User> roleUsers = this.getUsers().stream().toList();
-            roleUsers.forEach(this::removeUserFromRole);
+            roleUsers.forEach(this :: removeUserFromRole);
         }
     }
 
