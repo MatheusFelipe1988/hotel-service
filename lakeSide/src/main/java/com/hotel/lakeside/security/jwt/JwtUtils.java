@@ -27,12 +27,11 @@ public class JwtUtils {
     private int jwtExpirationTime;
 
     public String generateJwtTokenForUser(Authentication authentication){
-        HotelUserDetails userDetails = (HotelUserDetails) authentication.getDetails();
-        List<String> roles = userDetails.getAuthorities().stream()
+        HotelUserDetails userPrincipal = (HotelUserDetails) authentication.getDetails();
+        List<String> roles = userPrincipal.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority).toList();
-
         return Jwts.builder()
-                .setSubject(userDetails.getUsername())
+                .setSubject(userPrincipal.getUsername())
                 .claim("roles", roles)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime()+jwtExpirationTime))

@@ -12,6 +12,7 @@ import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,14 +28,13 @@ import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin("*")
 @RequestMapping("/rooms")
 public class RoomController {
     private final IRoomService service;
     private final BookingServiceImpl bookedService;
 
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/add/new-room")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<RoomResponse> addNewRoom(@RequestParam("foto") MultipartFile foto,
                                                    @RequestParam("roomType") String roomType,
                                                    @RequestParam("roomPrice") BigDecimal roomPrice)
@@ -45,13 +45,11 @@ public class RoomController {
         return ResponseEntity.ok(roomResponse);
     }
 
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping("/room/types")
     public List<String> getRoomTypes() {
         return service.getAllRoomTypes();
     }
 
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping("/all-rooms")
     public ResponseEntity<List<RoomResponse>> getAllRooms() throws SQLException {
         List<Room> rooms = service.getAllRoms();
@@ -68,15 +66,15 @@ public class RoomController {
         return ResponseEntity.ok(roomResponses);
     }
 
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @DeleteMapping("/delete/room/{roomId}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Void> deleteRoom(@PathVariable Long roomId) {
         service.deleteRoom(roomId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PutMapping("/update/{roomId}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<RoomResponse> updateRoom(@PathVariable Long roomId,
                                                    @RequestParam(required = false) String roomType,
                                                    @RequestParam(required = false) BigDecimal roomPrice,
@@ -90,7 +88,6 @@ public class RoomController {
         return ResponseEntity.ok(roomResponse);
     }
 
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping("/room/{roomId}")
     public ResponseEntity<Optional<RoomResponse>> getRoomById(@PathVariable Long roomId){
         Optional<Room> theRoom = service.getRoomById(roomId);

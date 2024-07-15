@@ -24,14 +24,13 @@ public class HotelUserDetails implements UserDetails {
     private Collection<GrantedAuthority> authorities;
 
     public static HotelUserDetails buildUserDetails(User user){
-        List<GrantedAuthority> authorities1 = user.getRoles().stream()
+        List<GrantedAuthority> authorities = user.getRoles().stream()
                 .map(role -> new SimpleGrantedAuthority(role.getName()))
                 .collect(Collectors.toList());
         return new HotelUserDetails(
                 user.getId(),
                 user.getEmail(),
-                user.getPassword(), authorities1
-        );
+                user.getPassword(), authorities);
     }
 
     @Override
