@@ -27,7 +27,7 @@ public class JwtUtils {
     private int jwtExpirationTime;
 
     public String generateJwtTokenForUser(Authentication authentication){
-        HotelUserDetails userPrincipal = (HotelUserDetails) authentication.getDetails();
+        HotelUserDetails userPrincipal = (HotelUserDetails) authentication.getPrincipal();
         List<String> roles = userPrincipal.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority).toList();
         return Jwts.builder()
