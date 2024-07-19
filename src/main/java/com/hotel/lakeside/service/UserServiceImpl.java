@@ -25,10 +25,11 @@ public class UserServiceImpl implements IUserService{
 
     @Override
     public User registerUser(User user){
-        if (repository.existByEmail(user.getEmail())){
+        if (repository.existsByEmail(user.getEmail())){
             throw new UserAlreadyExistsException(user.getEmail() + "already exists");
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        System.out.println(user.getPassword());
         Role userRole = roleRepository.findByName("ROLE_USER").get();
         user.setRoles(Collections.singletonList(userRole));
         return repository.save(user);

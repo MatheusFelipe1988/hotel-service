@@ -4,6 +4,7 @@ import com.hotel.lakeside.exception.FotoRetrivalException;
 import com.hotel.lakeside.exception.ResourceNotFoundException;
 import com.hotel.lakeside.model.BookedRoom;
 import com.hotel.lakeside.model.Room;
+import com.hotel.lakeside.response.BookingResponse;
 import com.hotel.lakeside.response.RoomResponse;
 import com.hotel.lakeside.service.BookingServiceImpl;
 import com.hotel.lakeside.service.IRoomService;
@@ -12,6 +13,7 @@ import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,16 +27,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@CrossOrigin("*")
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin("*")
 @RequestMapping("/rooms")
 public class RoomController {
+
     private final IRoomService service;
     private final BookingServiceImpl bookedService;
 
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/add/new-room")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<RoomResponse> addNewRoom(@RequestParam("foto") MultipartFile foto,
                                                    @RequestParam("roomType") String roomType,
                                                    @RequestParam("roomPrice") BigDecimal roomPrice)
@@ -45,13 +48,11 @@ public class RoomController {
         return ResponseEntity.ok(roomResponse);
     }
 
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping("/room/types")
     public List<String> getRoomTypes() {
         return service.getAllRoomTypes();
     }
 
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping("/all-rooms")
     public ResponseEntity<List<RoomResponse>> getAllRooms() throws SQLException {
         List<Room> rooms = service.getAllRoms();
@@ -68,15 +69,15 @@ public class RoomController {
         return ResponseEntity.ok(roomResponses);
     }
 
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @DeleteMapping("/delete/room/{roomId}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Void> deleteRoom(@PathVariable Long roomId) {
         service.deleteRoom(roomId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PutMapping("/update/{roomId}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<RoomResponse> updateRoom(@PathVariable Long roomId,
                                                    @RequestParam(required = false) String roomType,
                                                    @RequestParam(required = false) BigDecimal roomPrice,
@@ -90,7 +91,6 @@ public class RoomController {
         return ResponseEntity.ok(roomResponse);
     }
 
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping("/room/{roomId}")
     public ResponseEntity<Optional<RoomResponse>> getRoomById(@PathVariable Long roomId){
         Optional<Room> theRoom = service.getRoomById(roomId);
@@ -126,10 +126,10 @@ public class RoomController {
 
     private RoomResponse getRoomResponse(Room room) {
         List<BookedRoom> bookings = getAllBookingsByRoomId(room.getId());
-        /*List<BookingResponse> bookingInfo = bookings.stream()
+        List<BookingResponse> bookingInfo = bookings.stream()
                 .map(bookedRoom -> new BookingResponse(bookedRoom.getBookingId(),
                         bookedRoom.getCheckInDate(), bookedRoom.getCheckOutDate(),
-                        bookedRoom.getBookingConfirmationCode())).toList();*/
+                        bookedRoom.getBookingConfirmationCode())).toList();
         byte[] fotoBytes = null;
         Blob fotoBlob = room.getFoto();
         if (fotoBlob != null) {
@@ -141,7 +141,7 @@ public class RoomController {
             }
         }
         return new RoomResponse(room.getId(), room.getRoomType(),
-                room.getRoomPrice(), room.isBooked(), fotoBytes);
+                room.getRoomPrice(), room.isBooked(), fotoBytes, bookingInfo);
     }
 
     private List<BookedRoom> getAllBookingsByRoomId(Long roomId) {

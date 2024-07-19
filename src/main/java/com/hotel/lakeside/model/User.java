@@ -9,9 +9,9 @@ import java.util.Collection;
 import java.util.HashSet;
 
 @Entity
-@NoArgsConstructor
 @Getter
 @Setter
+@NoArgsConstructor
 public class User {
 
     @Id

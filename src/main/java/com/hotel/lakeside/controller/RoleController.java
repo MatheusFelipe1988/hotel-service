@@ -11,18 +11,21 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin("*")
 @RestController
-@RequestMapping("/api/roles")
+@RequestMapping("/roles")
 @RequiredArgsConstructor
 public class RoleController {
 
     private final IRoleService roleService;
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping("/all-roles")
     public ResponseEntity<List<Role>> getAllRoles(){
         return new ResponseEntity<>(roleService.getRoles(), HttpStatus.FOUND);
     }
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/create-new-role")
     public ResponseEntity<String> createRole(@RequestBody Role role){
         try {
@@ -33,21 +36,25 @@ public class RoleController {
         }
     }
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @DeleteMapping("/delete/{roleId}")
     public void deleteRole(@PathVariable("roleId") Long roleId){
         roleService.deleteRole(roleId);
     }
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/remove-all-users-from-role/{roleId}")
     public Role removeAllUsersFromRole(@PathVariable("roleId") Long roleId){
         return roleService.removeAllUsersFromRole(roleId);
     }
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("remove-user-to-role")
     public User removeUserFromRole(@RequestParam("userId") Long userId, @RequestParam("roleId") Long roleId){
         return roleService.removeUserFromRole(userId, roleId);
     }
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/assign-user-to-role")
     public User assignUserToRole(@RequestParam("userId") Long userId, @RequestParam("roleId") Long roleId){
         return roleService.assignRoleToUser(userId, roleId);
