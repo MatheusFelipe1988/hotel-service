@@ -4,6 +4,7 @@ import com.hotel.lakeside.exception.FotoRetrivalException;
 import com.hotel.lakeside.exception.ResourceNotFoundException;
 import com.hotel.lakeside.model.BookedRoom;
 import com.hotel.lakeside.model.Room;
+import com.hotel.lakeside.response.BookingResponse;
 import com.hotel.lakeside.response.RoomResponse;
 import com.hotel.lakeside.service.BookingServiceImpl;
 import com.hotel.lakeside.service.IRoomService;
@@ -123,10 +124,10 @@ public class RoomController {
 
     private RoomResponse getRoomResponse(Room room) {
         List<BookedRoom> bookings = getAllBookingsByRoomId(room.getId());
-        /*List<BookingResponse> bookingInfo = bookings.stream()
+        List<BookingResponse> bookingInfo = bookings.stream()
                 .map(bookedRoom -> new BookingResponse(bookedRoom.getBookingId(),
                         bookedRoom.getCheckInDate(), bookedRoom.getCheckOutDate(),
-                        bookedRoom.getBookingConfirmationCode())).toList();*/
+                        bookedRoom.getBookingConfirmationCode())).toList();
         byte[] fotoBytes = null;
         Blob fotoBlob = room.getFoto();
         if (fotoBlob != null) {
@@ -138,7 +139,7 @@ public class RoomController {
             }
         }
         return new RoomResponse(room.getId(), room.getRoomType(),
-                room.getRoomPrice(), room.isBooked(), fotoBytes);
+                room.getRoomPrice(), room.isBooked(), fotoBytes, bookingInfo);
     }
 
     private List<BookedRoom> getAllBookingsByRoomId(Long roomId) {

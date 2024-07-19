@@ -26,7 +26,6 @@ public class BookingController {
     private final IRoomService roomService;
 
     @GetMapping("/all-bookings")
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     public ResponseEntity<List<BookingResponse>> getAllBookings(){
         List<BookedRoom> bookedRooms = service.getAllBookings();
         List<BookingResponse> bookingResponses = new ArrayList<>();
@@ -38,7 +37,6 @@ public class BookingController {
     }
 
     @PostMapping("/room/{roomId}/booking")
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     public ResponseEntity<?> saveBooking(@PathVariable Long roomId, @RequestBody BookedRoom bookingRequest){
         try {
             String confirmationCode = service.saveBooking(roomId, bookingRequest);
@@ -62,7 +60,6 @@ public class BookingController {
     }
 
 
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @DeleteMapping("/booking/{bookingId}/delete")
     public void cancelBooking(@PathVariable Long bookingId){
         service.cancelBooking(bookingId);
