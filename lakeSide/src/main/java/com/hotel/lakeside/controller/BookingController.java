@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+@CrossOrigin("*")
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/bookings")
@@ -25,6 +26,7 @@ public class BookingController {
     private final IBookingService service;
     private final IRoomService roomService;
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping("/all-bookings")
     public ResponseEntity<List<BookingResponse>> getAllBookings(){
         List<BookedRoom> bookedRooms = service.getAllBookings();
@@ -36,6 +38,7 @@ public class BookingController {
         return ResponseEntity.ok(bookingResponses);
     }
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/room/{roomId}/booking")
     public ResponseEntity<?> saveBooking(@PathVariable Long roomId, @RequestBody BookedRoom bookingRequest){
         try {
@@ -59,7 +62,7 @@ public class BookingController {
         }
     }
 
-
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @DeleteMapping("/booking/{bookingId}/delete")
     public void cancelBooking(@PathVariable Long bookingId){
         service.cancelBooking(bookingId);

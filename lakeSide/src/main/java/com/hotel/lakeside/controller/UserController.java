@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin("*")
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
@@ -19,12 +20,14 @@ public class UserController {
     private final IUserService iUserService;
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping("/all")
     public ResponseEntity<List<User>> getUsers(){
         return new ResponseEntity<>(iUserService.getUsers(), HttpStatus.FOUND);
     }
 
-    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ADMIN')")
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/{email}")
     public ResponseEntity<?> getUserByEmail(@PathVariable("email") String email){
         try {
@@ -37,6 +40,7 @@ public class UserController {
         }
     }
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @DeleteMapping("/delete/{userId}")
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ADMIN') and #email == principal.username")
     public ResponseEntity<String> deleteUser(@PathVariable("userId") String email){

@@ -27,15 +27,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@CrossOrigin("*")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/rooms")
 public class RoomController {
+
     private final IRoomService service;
     private final BookingServiceImpl bookedService;
 
     @PostMapping("/add/new-room")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     public ResponseEntity<RoomResponse> addNewRoom(@RequestParam("foto") MultipartFile foto,
                                                    @RequestParam("roomType") String roomType,
                                                    @RequestParam("roomPrice") BigDecimal roomPrice)
@@ -47,11 +50,13 @@ public class RoomController {
     }
 
     @GetMapping("/room/types")
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     public List<String> getRoomTypes() {
         return service.getAllRoomTypes();
     }
 
     @GetMapping("/all-rooms")
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     public ResponseEntity<List<RoomResponse>> getAllRooms() throws SQLException {
         List<Room> rooms = service.getAllRoms();
         List<RoomResponse> roomResponses = new ArrayList<>();
@@ -69,6 +74,7 @@ public class RoomController {
 
     @DeleteMapping("/delete/room/{roomId}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     public ResponseEntity<Void> deleteRoom(@PathVariable Long roomId) {
         service.deleteRoom(roomId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -76,6 +82,7 @@ public class RoomController {
 
     @PutMapping("/update/{roomId}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     public ResponseEntity<RoomResponse> updateRoom(@PathVariable Long roomId,
                                                    @RequestParam(required = false) String roomType,
                                                    @RequestParam(required = false) BigDecimal roomPrice,
@@ -90,6 +97,7 @@ public class RoomController {
     }
 
     @GetMapping("/room/{roomId}")
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     public ResponseEntity<Optional<RoomResponse>> getRoomById(@PathVariable Long roomId){
         Optional<Room> theRoom = service.getRoomById(roomId);
         return theRoom.map(room -> {
@@ -99,6 +107,7 @@ public class RoomController {
     }
 
     @GetMapping("/available-rooms")
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     public ResponseEntity<List<RoomResponse>> getAvailableRooms(
             @RequestParam("checkInDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkInDate,
             @RequestParam("checkOutDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkOutDate,

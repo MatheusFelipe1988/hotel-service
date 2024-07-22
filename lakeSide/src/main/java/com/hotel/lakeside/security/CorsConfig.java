@@ -1,4 +1,4 @@
-package com.hotel.lakeside.security;
+/*package com.hotel.lakeside.security;
 
 import org.apache.catalina.filters.CorsFilter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -41,3 +41,4 @@ public class CorsConfig {
         return bean;
     }
 }
+*/
