@@ -1,7 +1,7 @@
 package com.hotel.lakeside.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,7 +13,6 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@AllArgsConstructor
 @NoArgsConstructor
 public class Role {
 
@@ -22,6 +21,7 @@ public class Role {
     private Long id;
     private String name;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "roles")
     private Collection<User> users = new HashSet<>();
 
