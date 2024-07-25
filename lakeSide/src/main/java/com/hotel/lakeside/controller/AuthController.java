@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin("*")
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/auth")
@@ -32,7 +31,6 @@ public class AuthController {
 
     private final JwtUtils jwtUtils;
 
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/register-user")
     public ResponseEntity<?> registerUser(@RequestBody User user){
         try {
@@ -43,7 +41,6 @@ public class AuthController {
         }
     }
 
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest){
         Authentication authentication = authenticationManager

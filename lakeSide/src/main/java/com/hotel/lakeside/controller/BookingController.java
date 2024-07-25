@@ -26,7 +26,6 @@ public class BookingController {
     private final IBookingService service;
     private final IRoomService roomService;
 
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping("/all-bookings")
     public ResponseEntity<List<BookingResponse>> getAllBookings(){
         List<BookedRoom> bookedRooms = service.getAllBookings();
@@ -38,7 +37,17 @@ public class BookingController {
         return ResponseEntity.ok(bookingResponses);
     }
 
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @GetMapping("/user/{email}/bookings")
+    public ResponseEntity<List<BookingResponse>> getBookingByUserEmail(@PathVariable String email){
+        List<BookedRoom> bookings = service.getBookingsByUserEmail(email);
+        List<BookingResponse> bookingResponses = new ArrayList<>();
+        for (BookedRoom bookedRoom: bookings){
+            BookingResponse bookingResponse = getBookingResponse(bookedRoom);
+            bookingResponses.add(bookingResponse);
+        }
+        return ResponseEntity.ok(bookingResponses);
+    }
+
     @PostMapping("/room/{roomId}/booking")
     public ResponseEntity<?> saveBooking(@PathVariable Long roomId, @RequestBody BookedRoom bookingRequest){
         try {
@@ -51,7 +60,6 @@ public class BookingController {
     }
 
     @GetMapping("/confirmation/{confirmationCode}")
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     public ResponseEntity<?> getBookingConfirmationCode(@PathVariable String confirmationCode){
         try {
             BookedRoom booking = service.findByBookingConfirmationCode(confirmationCode);
@@ -62,7 +70,6 @@ public class BookingController {
         }
     }
 
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @DeleteMapping("/booking/{bookingId}/delete")
     public void cancelBooking(@PathVariable Long bookingId){
         service.cancelBooking(bookingId);
