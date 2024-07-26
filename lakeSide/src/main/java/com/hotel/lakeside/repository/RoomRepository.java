@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDate;
 import java.util.List;
 
-@Repository
 public interface RoomRepository extends JpaRepository<Room, Long> {
 
     @Query("SELECT DISTINCT r.roomType FROM Room r")

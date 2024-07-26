@@ -26,12 +26,11 @@ public class BookingResponse {
 
     private int numberOfChildren;
 
-    private int numOfGuests;
+    private int totalFullguest;
 
     private String bookingConfirmationCode;
 
     private RoomResponse room;
-
 
     public BookingResponse(Long id, LocalDate checkInDate, LocalDate checkOutDate,
                            String bookingConfirmationCode) {

@@ -41,6 +41,7 @@ public class Room {
         if (bookings == null) {
             bookings = new ArrayList<>();
         }
+
         bookings.add(booking);
         booking.setRoom(this);
         isBooked = true;

@@ -51,17 +51,18 @@ public class BookedRoom {
         this.totalFullguest = this.NumberOfAdults + NumberOfChildren;
     }
 
-    public void setNumberOfAdults(int numberOfAdults) {
+   public  void setNumberOfAdults(int numberOfAdults){
         NumberOfAdults = numberOfAdults;
         totalCalculateNumberOfGuest();
-    }
+
+   }
 
     public void setNumberOfChildren(int numberOfChildren) {
         NumberOfChildren = numberOfChildren;
         totalCalculateNumberOfGuest();
     }
 
-    public void setBookingConfirmationCode(String bookingConfirmationCode) {
+    public void setBookingConfirmationCode(String bookingConfirmationCode){
         this.bookingConfirmationCode = bookingConfirmationCode;
     }
 }

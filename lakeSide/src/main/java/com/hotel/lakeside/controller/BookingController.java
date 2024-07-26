@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-@CrossOrigin("*")
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/bookings")
@@ -41,7 +40,7 @@ public class BookingController {
     public ResponseEntity<List<BookingResponse>> getBookingByUserEmail(@PathVariable String email){
         List<BookedRoom> bookings = service.getBookingsByUserEmail(email);
         List<BookingResponse> bookingResponses = new ArrayList<>();
-        for (BookedRoom bookedRoom: bookings){
+        for (BookedRoom bookedRoom : bookings){
             BookingResponse bookingResponse = getBookingResponse(bookedRoom);
             bookingResponses.add(bookingResponse);
         }
@@ -52,7 +51,7 @@ public class BookingController {
     public ResponseEntity<?> saveBooking(@PathVariable Long roomId, @RequestBody BookedRoom bookingRequest){
         try {
             String confirmationCode = service.saveBooking(roomId, bookingRequest);
-            return ResponseEntity.ok("Room bokeed successfully, your booking confirmation code is: "
+            return ResponseEntity.ok("Room boked successfully, your booking confirmation code is: "
                     + confirmationCode);
         }catch (InvalidBookingRequestException exception){
             return ResponseEntity.badRequest().body(exception.getMessage());
@@ -88,7 +87,7 @@ public class BookingController {
                 booking.getBookingConfirmationCode(),
                 booking.getGuestEmail(),
                 booking.getNumberOfAdults(),
-                booking.getNumberOfChildren(),
+                booking.getNumberOfAdults(),
                 booking.getTotalFullguest(),
                 booking.getGuestFullName(), room);
     }

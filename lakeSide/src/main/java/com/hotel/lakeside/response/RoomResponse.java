@@ -10,6 +10,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 public class RoomResponse {
+
     private Long id;
 
     private String roomType;

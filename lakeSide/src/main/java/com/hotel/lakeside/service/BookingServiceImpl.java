@@ -31,7 +31,7 @@ public class BookingServiceImpl implements IBookingService{
     @Override
     public BookedRoom findByBookingConfirmationCode(String confirmationCode) {
         return repository.findByBookingConfirmationCode(confirmationCode).orElseThrow(() -> new
-                ResourceNotFoundException("No booking found with booking code"));
+                ResourceNotFoundException("No booking found with booking code :" + confirmationCode));
     }
 
     @Override
