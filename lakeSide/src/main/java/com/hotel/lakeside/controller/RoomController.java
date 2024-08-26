@@ -8,6 +8,9 @@ import com.hotel.lakeside.response.BookingResponse;
 import com.hotel.lakeside.response.RoomResponse;
 import com.hotel.lakeside.service.BookingServiceImpl;
 import com.hotel.lakeside.service.IRoomService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -35,6 +38,11 @@ public class RoomController {
     private final IRoomService service;
     private final BookingServiceImpl bookedService;
 
+    @Operation(summary = "Novo agendamento", method = "POST")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "agendado com sucesso"),
+            @ApiResponse(responseCode = "400", description = "erro no agendamento")
+    })
     @PostMapping("/add/new-room")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<RoomResponse> addNewRoom(@RequestParam("foto") MultipartFile foto,
@@ -47,11 +55,21 @@ public class RoomController {
         return ResponseEntity.ok(roomResponse);
     }
 
+    @Operation(summary = "Novo agendamento", method = "POST")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "agendado com sucesso"),
+            @ApiResponse(responseCode = "400", description = "erro no agendamento")
+    })
     @GetMapping("/room/types")
     public List<String> getRoomTypes() {
         return service.getAllRoomTypes();
     }
 
+    @Operation(summary = "Novo agendamento", method = "POST")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "agendado com sucesso"),
+            @ApiResponse(responseCode = "400", description = "erro no agendamento")
+    })
     @GetMapping("/all-rooms")
     public ResponseEntity<List<RoomResponse>> getAllRooms() throws SQLException {
         List<Room> rooms = service.getAllRoms();
@@ -68,6 +86,11 @@ public class RoomController {
         return ResponseEntity.ok(roomResponses);
     }
 
+    @Operation(summary = "Novo agendamento", method = "POST")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "agendado com sucesso"),
+            @ApiResponse(responseCode = "400", description = "erro no agendamento")
+    })
     @DeleteMapping("/delete/room/{roomId}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Void> deleteRoom(@PathVariable Long roomId) {
@@ -75,6 +98,11 @@ public class RoomController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @Operation(summary = "Novo agendamento", method = "POST")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "agendado com sucesso"),
+            @ApiResponse(responseCode = "400", description = "erro no agendamento")
+    })
     @PutMapping("/update/{roomId}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<RoomResponse> updateRoom(@PathVariable Long roomId,
@@ -90,6 +118,11 @@ public class RoomController {
         return ResponseEntity.ok(roomResponse);
     }
 
+    @Operation(summary = "Novo agendamento", method = "POST")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "agendado com sucesso"),
+            @ApiResponse(responseCode = "400", description = "erro no agendamento")
+    })
     @GetMapping("/room/{roomId}")
     public ResponseEntity<Optional<RoomResponse>> getRoomById(@PathVariable Long roomId){
         Optional<Room> theRoom = service.getRoomById(roomId);
@@ -99,6 +132,11 @@ public class RoomController {
         }).orElseThrow(() -> new ResourceNotFoundException("Room not found"));
     }
 
+    @Operation(summary = "Novo agendamento", method = "POST")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "agendado com sucesso"),
+            @ApiResponse(responseCode = "400", description = "erro no agendamento")
+    })
     @GetMapping("/available-rooms")
     public ResponseEntity<List<RoomResponse>> getAvailableRooms(
             @RequestParam("checkInDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkInDate,

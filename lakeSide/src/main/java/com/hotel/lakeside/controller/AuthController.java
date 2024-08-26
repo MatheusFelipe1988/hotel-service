@@ -7,6 +7,9 @@ import com.hotel.lakeside.response.JwtResponse;
 import com.hotel.lakeside.security.HotelUserDetails;
 import com.hotel.lakeside.security.jwt.JwtUtils;
 import com.hotel.lakeside.service.IUserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -31,6 +34,11 @@ public class AuthController {
 
     private final JwtUtils jwtUtils;
 
+    @Operation(summary = "Novo agendamento", method = "POST")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "agendado com sucesso"),
+            @ApiResponse(responseCode = "400", description = "erro no agendamento")
+    })
     @PostMapping("/register-user")
     public ResponseEntity<?> registerUser(@RequestBody User user){
         try {
@@ -41,6 +49,11 @@ public class AuthController {
         }
     }
 
+    @Operation(summary = "Novo agendamento", method = "POST")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "agendado com sucesso"),
+            @ApiResponse(responseCode = "400", description = "erro no agendamento")
+    })
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest){
         Authentication authentication = authenticationManager

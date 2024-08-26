@@ -8,6 +8,9 @@ import com.hotel.lakeside.response.BookingResponse;
 import com.hotel.lakeside.response.RoomResponse;
 import com.hotel.lakeside.service.IBookingService;
 import com.hotel.lakeside.service.IRoomService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +28,12 @@ public class BookingController {
     private final IBookingService service;
     private final IRoomService roomService;
 
+
+    @Operation(summary = "Novo agendamento", method = "POST")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "agendado com sucesso"),
+            @ApiResponse(responseCode = "400", description = "erro no agendamento")
+    })
     @GetMapping("/all-bookings")
     public ResponseEntity<List<BookingResponse>> getAllBookings(){
         List<BookedRoom> bookedRooms = service.getAllBookings();
@@ -36,6 +45,11 @@ public class BookingController {
         return ResponseEntity.ok(bookingResponses);
     }
 
+    @Operation(summary = "Novo agendamento", method = "POST")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "agendado com sucesso"),
+            @ApiResponse(responseCode = "400", description = "erro no agendamento")
+    })
     @GetMapping("/user/{email}/bookings")
     public ResponseEntity<List<BookingResponse>> getBookingByUserEmail(@PathVariable String email){
         List<BookedRoom> bookings = service.getBookingsByUserEmail(email);
@@ -47,6 +61,11 @@ public class BookingController {
         return ResponseEntity.ok(bookingResponses);
     }
 
+    @Operation(summary = "Novo agendamento", method = "POST")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "agendado com sucesso"),
+            @ApiResponse(responseCode = "400", description = "erro no agendamento")
+    })
     @PostMapping("/room/{roomId}/booking")
     public ResponseEntity<?> saveBooking(@PathVariable Long roomId, @RequestBody BookedRoom bookingRequest){
         try {
@@ -58,6 +77,11 @@ public class BookingController {
         }
     }
 
+    @Operation(summary = "Novo agendamento", method = "POST")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "agendado com sucesso"),
+            @ApiResponse(responseCode = "400", description = "erro no agendamento")
+    })
     @GetMapping("/confirmation/{confirmationCode}")
     public ResponseEntity<?> getBookingConfirmationCode(@PathVariable String confirmationCode){
         try {
@@ -69,6 +93,11 @@ public class BookingController {
         }
     }
 
+    @Operation(summary = "Novo agendamento", method = "POST")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "agendado com sucesso"),
+            @ApiResponse(responseCode = "400", description = "erro no agendamento")
+    })
     @DeleteMapping("/booking/{bookingId}/delete")
     public void cancelBooking(@PathVariable Long bookingId){
         service.cancelBooking(bookingId);
