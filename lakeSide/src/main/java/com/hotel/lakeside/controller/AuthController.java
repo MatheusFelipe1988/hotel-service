@@ -34,10 +34,10 @@ public class AuthController {
 
     private final JwtUtils jwtUtils;
 
-    @Operation(summary = "Novo agendamento", method = "POST")
+    @Operation(summary = "Cadastrando Usuario", method = "POST")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "agendado com sucesso"),
-            @ApiResponse(responseCode = "400", description = "erro no agendamento")
+            @ApiResponse(responseCode = "200", description = "Adicionando Usuario"),
+            @ApiResponse(responseCode = "409", description = "Conflito quando se usa o mesmo nome, email etc.")
     })
     @PostMapping("/register-user")
     public ResponseEntity<?> registerUser(@RequestBody User user){
@@ -49,10 +49,10 @@ public class AuthController {
         }
     }
 
-    @Operation(summary = "Novo agendamento", method = "POST")
+    @Operation(summary = "Login do Usuario", method = "POST")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "agendado com sucesso"),
-            @ApiResponse(responseCode = "400", description = "erro no agendamento")
+            @ApiResponse(responseCode = "200", description = "Recebe o token do login"),
+            @ApiResponse(responseCode = "400", description = "Erro ao colocar dados cadastrados")
     })
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest){
