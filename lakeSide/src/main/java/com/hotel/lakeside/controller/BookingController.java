@@ -11,6 +11,7 @@ import com.hotel.lakeside.service.IRoomService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
+@Tag(name = "Reserva de Quarto")
 @RequestMapping("/bookings")
 public class BookingController {
 
@@ -29,10 +31,10 @@ public class BookingController {
     private final IRoomService roomService;
 
 
-    @Operation(summary = "Novo agendamento", method = "POST")
+    @Operation(summary = "Lista reservas", method = "GET")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "agendado com sucesso"),
-            @ApiResponse(responseCode = "400", description = "erro no agendamento")
+            @ApiResponse(responseCode = "200", description = "Listando todas as reservas"),
+            @ApiResponse(responseCode = "400", description = "error")
     })
     @GetMapping("/all-bookings")
     public ResponseEntity<List<BookingResponse>> getAllBookings(){
@@ -45,10 +47,10 @@ public class BookingController {
         return ResponseEntity.ok(bookingResponses);
     }
 
-    @Operation(summary = "Novo agendamento", method = "POST")
+    @Operation(summary = "Busca reserva por ID", method = "GET")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "agendado com sucesso"),
-            @ApiResponse(responseCode = "400", description = "erro no agendamento")
+            @ApiResponse(responseCode = "200", description = "ID da reserva encontrado"),
+            @ApiResponse(responseCode = "400", description = "Não existe este ID")
     })
     @GetMapping("/user/{email}/bookings")
     public ResponseEntity<List<BookingResponse>> getBookingByUserEmail(@PathVariable String email){
@@ -61,10 +63,10 @@ public class BookingController {
         return ResponseEntity.ok(bookingResponses);
     }
 
-    @Operation(summary = "Novo agendamento", method = "POST")
+    @Operation(summary = "Nova reserva", method = "POST")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "agendado com sucesso"),
-            @ApiResponse(responseCode = "400", description = "erro no agendamento")
+            @ApiResponse(responseCode = "200", description = "Inserindo nova reserva"),
+            @ApiResponse(responseCode = "400", description = "Erro na criação")
     })
     @PostMapping("/room/{roomId}/booking")
     public ResponseEntity<?> saveBooking(@PathVariable Long roomId, @RequestBody BookedRoom bookingRequest){
@@ -77,10 +79,10 @@ public class BookingController {
         }
     }
 
-    @Operation(summary = "Novo agendamento", method = "POST")
+    @Operation(summary = "Buscando Codigo", method = "GET")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "agendado com sucesso"),
-            @ApiResponse(responseCode = "400", description = "erro no agendamento")
+            @ApiResponse(responseCode = "200", description = "busca com sucesso"),
+            @ApiResponse(responseCode = "400", description = "erro na busca")
     })
     @GetMapping("/confirmation/{confirmationCode}")
     public ResponseEntity<?> getBookingConfirmationCode(@PathVariable String confirmationCode){
@@ -93,10 +95,10 @@ public class BookingController {
         }
     }
 
-    @Operation(summary = "Novo agendamento", method = "POST")
+    @Operation(summary = "Deletando reservas", method = "DELETE")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "agendado com sucesso"),
-            @ApiResponse(responseCode = "400", description = "erro no agendamento")
+            @ApiResponse(responseCode = "200", description = "Remoção bem sucedida"),
+            @ApiResponse(responseCode = "400", description = "erro ao deletar reservas")
     })
     @DeleteMapping("/booking/{bookingId}/delete")
     public void cancelBooking(@PathVariable Long bookingId){
