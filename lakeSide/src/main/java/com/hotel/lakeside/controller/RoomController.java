@@ -11,6 +11,7 @@ import com.hotel.lakeside.service.IRoomService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -30,6 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Tag(name = "Quarto")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/rooms")
@@ -38,10 +40,10 @@ public class RoomController {
     private final IRoomService service;
     private final BookingServiceImpl bookedService;
 
-    @Operation(summary = "Novo agendamento", method = "POST")
+    @Operation(summary = "Novo quarto", method = "POST")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "agendado com sucesso"),
-            @ApiResponse(responseCode = "400", description = "erro no agendamento")
+            @ApiResponse(responseCode = "200", description = "quarto cadastrado com sucesso"),
+            @ApiResponse(responseCode = "400", description = "erro no cadastro")
     })
     @PostMapping("/add/new-room")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -55,20 +57,20 @@ public class RoomController {
         return ResponseEntity.ok(roomResponse);
     }
 
-    @Operation(summary = "Novo agendamento", method = "POST")
+    @Operation(summary = "Listando tipos de quartos", method = "GET")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "agendado com sucesso"),
-            @ApiResponse(responseCode = "400", description = "erro no agendamento")
+            @ApiResponse(responseCode = "200", description = "Listando os tipos de quartos"),
+            @ApiResponse(responseCode = "400", description = "erro ao localizar o tipo")
     })
     @GetMapping("/room/types")
     public List<String> getRoomTypes() {
         return service.getAllRoomTypes();
     }
 
-    @Operation(summary = "Novo agendamento", method = "POST")
+    @Operation(summary = "Listando todos os quartos", method = "GET")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "agendado com sucesso"),
-            @ApiResponse(responseCode = "400", description = "erro no agendamento")
+            @ApiResponse(responseCode = "200", description = "lista os quartos"),
+            @ApiResponse(responseCode = "400", description = "error")
     })
     @GetMapping("/all-rooms")
     public ResponseEntity<List<RoomResponse>> getAllRooms() throws SQLException {
@@ -76,6 +78,7 @@ public class RoomController {
         List<RoomResponse> roomResponses = new ArrayList<>();
         for (Room room : rooms) {
             byte[] fotoBytes = service.getRoomFotoByRoomId(room.getId());
+
             if (fotoBytes != null && fotoBytes.length > 0) {
                 String base64Foto = Base64.encodeBase64String(fotoBytes);
                 RoomResponse roomResponse = getRoomResponse(room);
@@ -86,10 +89,10 @@ public class RoomController {
         return ResponseEntity.ok(roomResponses);
     }
 
-    @Operation(summary = "Novo agendamento", method = "POST")
+    @Operation(summary = "Removendo um quarto", method = "DELETE")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "agendado com sucesso"),
-            @ApiResponse(responseCode = "400", description = "erro no agendamento")
+            @ApiResponse(responseCode = "200", description = "Remoção bem sucedida"),
+            @ApiResponse(responseCode = "204", description = "ID não existe")
     })
     @DeleteMapping("/delete/room/{roomId}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -98,7 +101,7 @@ public class RoomController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @Operation(summary = "Novo agendamento", method = "POST")
+    @Operation(summary = "Atualizando dado do quarto", method = "PUT")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "agendado com sucesso"),
             @ApiResponse(responseCode = "400", description = "erro no agendamento")
@@ -118,10 +121,10 @@ public class RoomController {
         return ResponseEntity.ok(roomResponse);
     }
 
-    @Operation(summary = "Novo agendamento", method = "POST")
+    @Operation(summary = "Busca quarto pelo ID", method = "GET")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "agendado com sucesso"),
-            @ApiResponse(responseCode = "400", description = "erro no agendamento")
+            @ApiResponse(responseCode = "200", description = "sucesso na busca"),
+            @ApiResponse(responseCode = "400", description = "ID não existe")
     })
     @GetMapping("/room/{roomId}")
     public ResponseEntity<Optional<RoomResponse>> getRoomById(@PathVariable Long roomId){
@@ -132,10 +135,10 @@ public class RoomController {
         }).orElseThrow(() -> new ResourceNotFoundException("Room not found"));
     }
 
-    @Operation(summary = "Novo agendamento", method = "POST")
+    @Operation(summary = "Salvando o quarto", method = "GET")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "agendado com sucesso"),
-            @ApiResponse(responseCode = "400", description = "erro no agendamento")
+            @ApiResponse(responseCode = "200", description = "sucesso"),
+            @ApiResponse(responseCode = "400", description = "error")
     })
     @GetMapping("/available-rooms")
     public ResponseEntity<List<RoomResponse>> getAvailableRooms(
